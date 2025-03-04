@@ -194,6 +194,19 @@ export function changeQuestionTypeById(
     );
 }
 
+function editArray(
+    targetOptionIndex: number,
+    newOption: string,
+    options: string[],
+): string[] {
+    if (targetOptionIndex == -1) {
+        return [...options, newOption];
+    }
+    const newOptions: string[] = [...options];
+    newOptions.splice(targetOptionIndex, 1, newOption);
+    return newOptions;
+}
+
 /**
  * Consumes an array of Questions and produces a new array of Questions, where all
  * the Questions are the same EXCEPT for the one with the given `targetId`. That
@@ -222,19 +235,6 @@ export function editOption(
             }
         :   question,
     );
-}
-
-function editArray(
-    targetOptionIndex: number,
-    newOption: string,
-    options: string[],
-): string[] {
-    if (targetOptionIndex == -1) {
-        return [...options, newOption];
-    }
-    const newOptions: string[] = [...options];
-    newOptions.splice(targetOptionIndex, 1, newOption);
-    return newOptions;
 }
 
 /***
