@@ -163,7 +163,9 @@ export function renameQuestionById(
     targetId: number,
     newName: string,
 ): Question[] {
-    return [];
+    return questions.map((question: Question) =>
+        question.id == targetId ? { ...question, name: newName } : question,
+    );
 }
 
 /***
@@ -178,7 +180,18 @@ export function changeQuestionTypeById(
     targetId: number,
     newQuestionType: QuestionType,
 ): Question[] {
-    return [];
+    return questions.map((question: Question) =>
+        question.id == targetId ?
+            {
+                ...question,
+                type: newQuestionType,
+                options:
+                    newQuestionType != "multiple_choice_question" ?
+                        []
+                    :   question.options,
+            }
+        :   question,
+    );
 }
 
 /**
@@ -197,7 +210,31 @@ export function editOption(
     targetOptionIndex: number,
     newOption: string,
 ): Question[] {
-    return [];
+    return questions.map((question: Question) =>
+        question.id == targetId ?
+            {
+                ...question,
+                options: editArray(
+                    targetOptionIndex,
+                    newOption,
+                    question.options,
+                ),
+            }
+        :   question,
+    );
+}
+
+function editArray(
+    targetOptionIndex: number,
+    newOption: string,
+    options: string[],
+): string[] {
+    if (targetOptionIndex == -1) {
+        return [...options, newOption];
+    }
+    const newOptions: string[] = [...options];
+    newOptions.splice(targetOptionIndex, 1, newOption);
+    return newOptions;
 }
 
 /***
@@ -211,5 +248,11 @@ export function duplicateQuestionInArray(
     targetId: number,
     newId: number,
 ): Question[] {
-    return [];
+    const foundTarget = questions.find(
+        (question: Question) => question.id == targetId,
+    );
+    if (foundTarget) {
+        return [...questions, { ...foundTarget, id: newId }];
+    }
+    return [...questions];
 }
